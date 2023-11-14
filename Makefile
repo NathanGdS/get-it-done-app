@@ -1,2 +1,2 @@
-run:
-	@go run main.go
+run/cli:
+	@go run ./cmd/cli.go $(ARG)
