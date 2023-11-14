@@ -4,6 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"os"
+
+	"github.com/nathangds/get-it-done-app/presenters"
 )
 
 func main() {
@@ -22,7 +24,7 @@ func main() {
 	case *del > 0:
 		fmt.Println("delete a given todo")
 	case *list:
-		fmt.Println("list all todos")
+		presenters.ListTodosCli()
 	default:
 		fmt.Fprintln(os.Stdout, "invalid command")
 		os.Exit(0)
