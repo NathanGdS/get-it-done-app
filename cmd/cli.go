@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/nathangds/get-it-done-app/presenters"
+	"github.com/nathangds/get-it-done-app/handlers"
 )
 
 func main() {
@@ -18,13 +18,13 @@ func main() {
 
 	switch {
 	case *add != "":
-		presenters.AddTodo(*add)
+		handlers.AddTodo(*add)
 	case *complete > 0:
 		fmt.Println("complete a given todo")
 	case *del > 0:
 		fmt.Println("delete a given todo")
 	case *list:
-		presenters.ListTodosCli()
+		handlers.ListTodosCli()
 	default:
 		fmt.Fprintln(os.Stdout, "invalid command")
 		os.Exit(0)
