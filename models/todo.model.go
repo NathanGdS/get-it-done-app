@@ -96,5 +96,6 @@ func (t *Todo) Load(filename string) (error, *[]Todo) {
 	if err != nil {
 		return err, nil
 	}
+	Todos = *todos
 	return nil, todos
 }

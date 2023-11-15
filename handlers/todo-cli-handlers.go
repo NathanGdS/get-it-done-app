@@ -9,7 +9,12 @@ import (
 )
 
 func ListTodosCli() {
-	var todos = models.Todos
+	var todos = &models.Todos
+
+	if len(*todos) == 0 {
+		todoReference := &models.Todo{}
+		todoReference.Load("todos.json")
+	}
 
 	table := simpletable.New()
 
@@ -21,7 +26,7 @@ func ListTodosCli() {
 		},
 	}
 
-	for _, row := range todos {
+	for _, row := range *todos {
 		r := []*simpletable.Cell{
 			{Text: strconv.Itoa(row.ID)},
 			{Text: row.Title},
