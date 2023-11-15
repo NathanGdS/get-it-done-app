@@ -39,7 +39,6 @@ func AddTodo(title string) {
 	todos := &models.Todo{}
 	todo := todos.AddTodo(title, "todos.json")
 	todos.Save("todos.json", todo)
-	todos.LoadTodos("todos.json")
 	fmt.Println("Todo added successfully!")
 	ListTodosCli()
 }

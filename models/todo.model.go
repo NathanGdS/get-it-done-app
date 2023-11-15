@@ -68,6 +68,8 @@ func (t *Todo) Save(filename string, todo Todo) {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	Todos = newContent
 }
 
 func (t *Todo) Load(filename string) (error, *[]Todo) {
