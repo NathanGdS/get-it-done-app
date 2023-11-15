@@ -36,7 +36,12 @@ func (t *Todo) LoadTodos(filename string) error {
 }
 
 func (t *Todo) AddTodo(title string, filename string) Todo {
-	t.LoadTodos("todos.json")
+	err := t.LoadTodos("todos.json")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	actualSize := len(Todos)
 	newTodo := Todo{ID: actualSize + 1, Title: title, Completed: false}
 
