@@ -1,15 +1,93 @@
 package models
 
+import (
+	"encoding/json"
+	"errors"
+	"log"
+	"os"
+)
+
 type Todo struct {
 	ID        int    `json:"id"`
 	Title     string `json:"title"`
 	Completed bool   `json:"completed"`
 }
 
-var Todos []Todo = []Todo{
-	{ID: 1, Title: "Add Todos", Completed: false},
+var Todos []Todo
+
+func (t *Todo) LoadTodos(filename string) error {
+	file, err := os.ReadFile(filename)
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return nil
+		}
+		return err
+	}
+
+	if len(file) == 0 {
+		return err
+	}
+	err = json.Unmarshal(file, &Todos)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
-func (*Todo) ListTodos() []Todo {
-	return Todos
+func (t *Todo) AddTodo(title string, filename string) Todo {
+	t.LoadTodos("todos.json")
+	actualSize := len(Todos)
+	newTodo := Todo{ID: actualSize + 1, Title: title, Completed: false}
+
+	return newTodo
+}
+
+func (t *Todo) Save(filename string, todo Todo) {
+	err, existentContent := t.Load(filename)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	newContent := append(*existentContent, todo)
+
+	data, err := json.Marshal(newContent)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = os.WriteFile(filename, data, 0644)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func (t *Todo) Load(filename string) (error, *[]Todo) {
+	todos := &[]Todo{}
+
+	file, err := os.OpenFile(filename, os.O_RDONLY|os.O_CREATE, 0644)
+	if err != nil {
+		return err, nil
+	}
+	defer file.Close()
+
+	data, err := os.ReadFile(filename)
+
+	if err != nil {
+		return err, nil
+	}
+
+	if len(data) == 0 {
+		return nil, todos
+	}
+
+	err = json.Unmarshal(data, &todos)
+
+	if err != nil {
+		return err, nil
+	}
+	return nil, todos
 }

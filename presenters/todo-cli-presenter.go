@@ -1,6 +1,7 @@
 package presenters
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/alexeyco/simpletable"
@@ -32,4 +33,13 @@ func ListTodosCli() {
 
 	table.SetStyle(simpletable.StyleDefault)
 	table.Println()
+}
+
+func AddTodo(title string) {
+	todos := &models.Todo{}
+	todo := todos.AddTodo(title, "todos.json")
+	todos.Save("todos.json", todo)
+	todos.LoadTodos("todos.json")
+	fmt.Println("Todo added successfully!")
+	ListTodosCli()
 }
