@@ -54,3 +54,10 @@ func DeleteTodoById(id int) {
 	fmt.Printf("Todo '%d' deleted successfully!\n", id)
 	ListTodosCli()
 }
+
+func CompleteTodoById(id int) {
+	todos := &models.Todo{}
+	todos.Complete("todos.json", id)
+	fmt.Printf("Todo '%d' completed successfully!\n", id)
+	ListTodosCli()
+}

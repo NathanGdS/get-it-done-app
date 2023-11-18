@@ -20,7 +20,7 @@ func main() {
 	case *add != "":
 		handlers.AddTodo(*add)
 	case *complete > 0:
-		fmt.Println("complete a given todo")
+		handlers.CompleteTodoById(*complete)
 	case *del > 0:
 		handlers.DeleteTodoById(*del)
 	case *list:

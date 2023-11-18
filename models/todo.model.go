@@ -134,3 +134,34 @@ func (t *Todo) Delete(filename string, id int) {
 
 	Todos = newContent
 }
+
+func (t *Todo) Complete(filename string, id int) {
+	err, existentContent := t.Load(filename)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var newContent []Todo
+
+	for _, todo := range *existentContent {
+		if todo.ID == id {
+			todo.Completed = true
+		}
+		newContent = append(newContent, todo)
+	}
+
+	data, err := json.Marshal(newContent)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = os.WriteFile(filename, data, 0644)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	Todos = newContent
+}
