@@ -120,6 +120,10 @@ func (t *Todo) Delete(filename string, id int) {
 		newContent = []Todo{}
 	}
 
+	if len(newContent) == len(*existentContent) {
+		log.Fatalf("Todo of id '%d' not found", id)
+	}
+
 	data, err := json.Marshal(newContent)
 
 	if err != nil {
@@ -143,12 +147,18 @@ func (t *Todo) Complete(filename string, id int) {
 	}
 
 	var newContent []Todo
+	var founded bool = false
 
 	for _, todo := range *existentContent {
 		if todo.ID == id {
 			todo.Completed = true
+			founded = true
 		}
 		newContent = append(newContent, todo)
+	}
+
+	if !founded {
+		log.Fatalf("Todo of id '%d' not found", id)
 	}
 
 	data, err := json.Marshal(newContent)
