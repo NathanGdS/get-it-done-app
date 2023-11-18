@@ -36,7 +36,7 @@ func (t *Todo) LoadTodos(filename string) error {
 }
 
 func (t *Todo) AddTodo(title string, filename string) Todo {
-	err := t.LoadTodos("todos.json")
+	err := t.LoadTodos(filename)
 
 	if err != nil {
 		log.Fatal(err)

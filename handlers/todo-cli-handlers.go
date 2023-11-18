@@ -8,12 +8,12 @@ import (
 	"github.com/nathangds/get-it-done-app/models"
 )
 
-func ListTodosCli() {
+func ListTodosCli(fileName string) {
 	var todos = &models.Todos
 
 	if len(*todos) == 0 {
 		todoReference := &models.Todo{}
-		todoReference.Load("todos.json")
+		todoReference.Load(fileName)
 	}
 
 	table := simpletable.New()
@@ -40,24 +40,24 @@ func ListTodosCli() {
 	table.Println()
 }
 
-func AddTodo(title string) {
+func AddTodo(title string, fileName string) {
 	todos := &models.Todo{}
-	todo := todos.AddTodo(title, "todos.json")
-	todos.Save("todos.json", todo)
+	todo := todos.AddTodo(title, fileName)
+	todos.Save(fileName, todo)
 	fmt.Println("Todo added successfully!")
-	ListTodosCli()
+	ListTodosCli(fileName)
 }
 
-func DeleteTodoById(id int) {
+func DeleteTodoById(id int, fileName string) {
 	todos := &models.Todo{}
-	todos.Delete("todos.json", id)
+	todos.Delete(fileName, id)
 	fmt.Printf("Todo '%d' deleted successfully!\n", id)
-	ListTodosCli()
+	ListTodosCli(fileName)
 }
 
-func CompleteTodoById(id int) {
+func CompleteTodoById(id int, fileName string) {
 	todos := &models.Todo{}
-	todos.Complete("todos.json", id)
+	todos.Complete(fileName, id)
 	fmt.Printf("Todo '%d' completed successfully!\n", id)
-	ListTodosCli()
+	ListTodosCli(fileName)
 }
