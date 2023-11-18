@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"os"
 
 	"github.com/nathangds/get-it-done-app/handlers"
 )
@@ -26,8 +25,8 @@ func main() {
 	case *list:
 		handlers.ListTodosCli()
 	default:
-		fmt.Fprintln(os.Stdout, "invalid command")
-		os.Exit(0)
+		fmt.Println("Invalid option, loading all todos...")
+		handlers.ListTodosCli()
 	}
 
 }
