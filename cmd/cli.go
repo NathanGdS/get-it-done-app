@@ -22,7 +22,7 @@ func main() {
 	case *complete > 0:
 		fmt.Println("complete a given todo")
 	case *del > 0:
-		fmt.Println("delete a given todo")
+		handlers.DeleteTodoById(*del)
 	case *list:
 		handlers.ListTodosCli()
 	default:

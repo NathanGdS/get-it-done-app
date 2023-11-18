@@ -47,3 +47,10 @@ func AddTodo(title string) {
 	fmt.Println("Todo added successfully!")
 	ListTodosCli()
 }
+
+func DeleteTodoById(id int) {
+	todos := &models.Todo{}
+	todos.Delete("todos.json", id)
+	fmt.Printf("Todo '%d' deleted successfully!\n", id)
+	ListTodosCli()
+}

@@ -96,6 +96,41 @@ func (t *Todo) Load(filename string) (error, *[]Todo) {
 	if err != nil {
 		return err, nil
 	}
+
 	Todos = *todos
 	return nil, todos
+}
+
+func (t *Todo) Delete(filename string, id int) {
+	err, existentContent := t.Load(filename)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var newContent []Todo
+
+	for _, todo := range *existentContent {
+		if todo.ID != id {
+			newContent = append(newContent, todo)
+		}
+	}
+
+	if newContent == nil {
+		newContent = []Todo{}
+	}
+
+	data, err := json.Marshal(newContent)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = os.WriteFile(filename, data, 0644)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	Todos = newContent
 }
