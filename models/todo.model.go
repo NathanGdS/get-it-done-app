@@ -15,34 +15,37 @@ type Todo struct {
 
 var Todos []Todo
 
-func (t *Todo) LoadTodos(filename string) error {
+func (t *Todo) LoadTodos(filename string) (error, []Todo) {
 	file, err := os.ReadFile(filename)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
-			return nil
+			return nil, nil
 		}
-		return err
+		return err, nil
 	}
 
 	if len(file) == 0 {
-		return err
+		return err, nil
 	}
 	err = json.Unmarshal(file, &Todos)
 	if err != nil {
-		return err
+		return err, nil
 	}
 
-	return nil
+	return nil, Todos
 }
 
 func (t *Todo) AddTodo(title string, filename string) Todo {
-	err := t.LoadTodos(filename)
+	err, todos := t.LoadTodos(filename)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	actualSize := len(Todos)
+	actualSize := len(todos)
+	if actualSize > 0 {
+		actualSize = todos[actualSize-1].ID
+	}
 	newTodo := Todo{ID: actualSize + 1, Title: title, Completed: false}
 
 	return newTodo

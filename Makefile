@@ -1,5 +1,5 @@
 run/cli:
-	@go run ./cmd/cli.go $(ARG)
+	@./bin/cli.exe --$(ARG)
 
 build/cli:
 	@go build -o ./bin/cli.exe ./cmd/cli.go
