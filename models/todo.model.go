@@ -15,28 +15,28 @@ type Todo struct {
 
 var Todos []Todo
 
-func (t *Todo) LoadTodos(filename string) (error, []Todo) {
+func (t *Todo) LoadTodos(filename string) ([]Todo, error) {
 	file, err := os.ReadFile(filename)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			return nil, nil
 		}
-		return err, nil
+		return nil, err
 	}
 
 	if len(file) == 0 {
-		return err, nil
+		return nil, err
 	}
 	err = json.Unmarshal(file, &Todos)
 	if err != nil {
-		return err, nil
+		return nil, err
 	}
 
-	return nil, Todos
+	return Todos, nil
 }
 
 func (t *Todo) AddTodo(title string, filename string) Todo {
-	err, todos := t.LoadTodos(filename)
+	todos, err := t.LoadTodos(filename)
 
 	if err != nil {
 		log.Fatal(err)
@@ -52,7 +52,7 @@ func (t *Todo) AddTodo(title string, filename string) Todo {
 }
 
 func (t *Todo) Save(filename string, todo Todo) {
-	err, existentContent := t.Load(filename)
+	existentContent, err := t.Load(filename)
 
 	if err != nil {
 		log.Fatal(err)
@@ -75,37 +75,37 @@ func (t *Todo) Save(filename string, todo Todo) {
 	Todos = newContent
 }
 
-func (t *Todo) Load(filename string) (error, *[]Todo) {
+func (t *Todo) Load(filename string) (*[]Todo, error) {
 	todos := &[]Todo{}
 
 	file, err := os.OpenFile(filename, os.O_RDONLY|os.O_CREATE, 0644)
 	if err != nil {
-		return err, nil
+		return nil, err
 	}
 	defer file.Close()
 
 	data, err := os.ReadFile(filename)
 
 	if err != nil {
-		return err, nil
+		return nil, err
 	}
 
 	if len(data) == 0 {
-		return nil, todos
+		return todos, nil
 	}
 
 	err = json.Unmarshal(data, &todos)
 
 	if err != nil {
-		return err, nil
+		return nil, err
 	}
 
 	Todos = *todos
-	return nil, todos
+	return todos, nil
 }
 
 func (t *Todo) Delete(filename string, id int) {
-	err, existentContent := t.Load(filename)
+	existentContent, err := t.Load(filename)
 
 	if err != nil {
 		log.Fatal(err)
@@ -143,7 +143,7 @@ func (t *Todo) Delete(filename string, id int) {
 }
 
 func (t *Todo) Complete(filename string, id int) {
-	err, existentContent := t.Load(filename)
+	existentContent, err := t.Load(filename)
 
 	if err != nil {
 		log.Fatal(err)
